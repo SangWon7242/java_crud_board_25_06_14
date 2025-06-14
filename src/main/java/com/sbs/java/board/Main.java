@@ -33,10 +33,7 @@ public class Main {
 
         int id = ++articleLastId;
 
-        Article article = new Article();
-        article.id = id;
-        article.subject = subject;
-        article.content = content;
+        Article article = new Article(id, subject, content);
 
         System.out.println("입력 된 게시물 객체 : " + article);
 
@@ -61,6 +58,13 @@ class Article {
   int id;
   String subject;
   String content;
+
+  // 객체가 만들어질 때 한번 실행!
+  Article(int id, String subject, String content) {
+    this.id = id;
+    this.subject = subject;
+    this.content = content;
+  }
 
   @Override
   public String toString() {
