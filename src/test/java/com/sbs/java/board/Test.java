@@ -1,28 +1,31 @@
 package com.sbs.java.board;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Test {
   public static void main(String[] args) {
-    String queryString1 = "page=1&searchKeyword=제목1&searchKeywordTypeCode=subject&boardId=1";
-    Map<String, String> params1 = Util.getParams(queryString1);
-    System.out.println(params1);
-
-    String queryString2 = "page=2&searchKeyword=내용1&searchKeywordTypeCode=content&boardId=2";
-    Map<String, String> params2 = Util.getParams(queryString2);
-    System.out.println(params2);
+    String queryString = "/usr/article/list?page=1&searchKeyword=제목1&searchKeywordTypeCode=subject&boardId=1";
+    Map<String, String> params = Util.getParamsFormUrl(queryString);
+    System.out.println(params);
   }
 }
 
 class Util {
-  static Map<String, String> getParams(String queryStr) {
-    Map<String, String> params = new LinkedHashMap<>();
+  static Map<String, String> getParamsFormUrl(String url) {
+    Map<String, String> params = new HashMap<>();
+    String[] urlBits = url.split("\\?", 2);
 
-    String[] queryStringBits = queryStr.split("&");
+    if(urlBits.length == 1) return params;
 
-    for (String bit : queryStringBits) {
-      String[] bitBits = bit.split("=");
-      params.put(bitBits[0], bitBits[1]);
+    String queryStr = urlBits[1];
+
+    for(String bit : queryStr.split("&")) {
+      String[] bits = bit.split("=", 2);
+
+      if(bits.length == 1) continue;
+
+      params.put(bits[0], bits[1]);
     }
 
     return params;
