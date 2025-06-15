@@ -30,8 +30,6 @@ public class Main {
     makeArticleTestData(articles);
 
     int articleLastId = articles.get(articles.size() - 1).id;
-    Article lastArticle = null;
-
     System.out.println("== 자바 CRUD 게시판 ==");
 
     while (true) {
@@ -59,8 +57,6 @@ public class Main {
         int id = ++articleLastId;
 
         Article article = new Article(id, subject, content);
-        lastArticle = article;
-
         articles.add(article);
 
         System.out.println("입력 된 게시물 객체 : " + article);
@@ -69,8 +65,7 @@ public class Main {
       } else if (cmd.equals("/usr/article/detail")) {
         System.out.println("== 게시물 상세보기 ==");
 
-        // lastArticle은 마지막 게시물 객체의 주소값을 가진다.
-        Article article = lastArticle;
+        Article article = articles.get(articles.size() - 1);
 
         if (article == null) {
           System.out.println("게시물이 존재하지 않습니다.");
