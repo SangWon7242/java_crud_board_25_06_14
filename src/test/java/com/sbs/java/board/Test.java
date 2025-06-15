@@ -1,36 +1,32 @@
 package com.sbs.java.board;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Test {
   public static void main(String[] args) {
-    String queryString = "f=5&a=1&b=2&c=3&d=4";
+    String queryString = "page=1&searchKeyword=제목1&searchKeywordTypeCode=subject&boardId=1";
     String[] queryStringBits = queryString.split("&");
-    System.out.println(Arrays.toString(queryStringBits));
 
-    List<String> paramNames = new ArrayList<>();
-    List<Integer> paramValues = new ArrayList<>();
+    // Map<String, String> params = new HashMap<>();
+    Map<String, String> params = new LinkedHashMap<>();
 
     for (String bit : queryStringBits) {
       String[] bitBits = bit.split("=");
       String paramName = bitBits[0];
       String paramValue = bitBits[1];
 
-      paramNames.add(paramName);
-      paramValues.add(Integer.valueOf(paramValue));
+      params.put(paramName, paramValue);
     }
 
-    for(int i = 0; i < paramNames.size(); i++) {
-      String paramName = paramNames.get(i);
-      int paramValue = paramValues.get(i);
+    System.out.println(params);
 
-      System.out.printf("%s : %d\n", paramName, paramValue);
-    }
+    System.out.println("== 원하는 것을 하나씩 뽑아오기 ==");
+    System.out.printf("page : %d\n", Integer.parseInt(params.get("page")));
+    System.out.printf("searchKeyword : %s\n", params.get("searchKeyword"));
+    System.out.printf("searchKeywordTypeCode : %s\n", params.get("searchKeywordTypeCode"));
+    System.out.printf("boardId : %d\n", Integer.parseInt(params.get("boardId")));
 
-    // d의 위치 확인
-    int findIndex = paramNames.indexOf("d");
-    System.out.println("d의 값 : " + paramValues.get(findIndex));
+    System.out.println("== 반복문을 이용한 데이터 순회 ==");
+    params.forEach((key, value) -> System.out.printf("%s : %s\n", key, value));
   }
 }
