@@ -29,7 +29,7 @@ public class Main {
     List<Article> articles = new ArrayList<>();
     makeArticleTestData(articles);
 
-    int articleLastId = 0;
+    int articleLastId = articles.get(articles.size() - 1).id;
     Article lastArticle = null;
 
     System.out.println("== 자바 CRUD 게시판 ==");
