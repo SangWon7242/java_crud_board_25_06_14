@@ -1,5 +1,8 @@
 package com.sbs.java.board;
 
+import com.sbs.java.board.boudedContext.article.Article;
+import com.sbs.java.board.boudedContext.global.base.Rq;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -7,18 +10,6 @@ import java.util.stream.IntStream;
 
 public class Main {
   static void makeArticleTestData(List<Article> articles) {
-    /*
-    articles.add(new Article(1, "제목1", "내용1"));
-    articles.add(new Article(2, "제목2", "내용2"));
-    articles.add(new Article(3, "제목3", "내용3"));
-    */
-
-    /*
-    for(int i = 1; i <= 3; i++) {
-      articles.add(new Article(i, "제목" + i, "내용" + i));
-    }
-    */
-
     IntStream.rangeClosed(1, 3)
         .forEach(i -> articles.add(new Article(i, "제목" + i, "내용" + i)));
   }
@@ -36,7 +27,9 @@ public class Main {
       System.out.print("명령) ");
       String cmd = sc.nextLine();
 
-      if (cmd.equals("/usr/article/write")) {
+      Rq rq = new Rq(cmd);
+
+      if (rq.urlPath().equals("/usr/article/write")) {
         System.out.println("== 게시물 작성 ==");
         System.out.print("제목 : ");
         String subject = sc.nextLine();
@@ -59,10 +52,8 @@ public class Main {
         Article article = new Article(id, subject, content);
         articles.add(article);
 
-        System.out.println("입력 된 게시물 객체 : " + article);
-
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
-      } else if (cmd.equals("/usr/article/detail")) {
+      } else if (rq.urlPath().equals("/usr/article/detail")) {
         System.out.println("== 게시물 상세보기 ==");
 
         Article article = articles.get(articles.size() - 1);
@@ -78,7 +69,7 @@ public class Main {
         System.out.printf("내용 : %s\n", article.content);
 
 
-      } else if (cmd.equals("/usr/article/list")) {
+      } else if (rq.urlPath().equals("/usr/article/list")) {
         if(articles.isEmpty()) {
           System.out.println("게시물이 존재하지 않습니다.");
           continue;
@@ -92,7 +83,7 @@ public class Main {
           System.out.printf("%d | %s\n", article.id, article.subject);
         }
 
-      } else if (cmd.equals("exit")) {
+      } else if (rq.urlPath().equals("exit")) {
         System.out.println("프로그램을 종료합니다.");
         break;
       } else {
@@ -103,23 +94,5 @@ public class Main {
     System.out.println("== 자바 CRUD 게시판 종료 ==");
 
     sc.close();
-  }
-}
-
-class Article {
-  int id;
-  String subject;
-  String content;
-
-  // 객체가 만들어질 때 한번 실행!
-  Article(int id, String subject, String content) {
-    this.id = id;
-    this.subject = subject;
-    this.content = content;
-  }
-
-  @Override
-  public String toString() {
-    return "{id : %d, subject: \"%s\", content: \"%s\"}".formatted(id, subject, content);
   }
 }
