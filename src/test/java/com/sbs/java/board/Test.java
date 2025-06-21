@@ -5,12 +5,29 @@ import java.util.Map;
 
 public class Test {
   public static void main(String[] args) {
-    String url = "/usr/article/list?page=1&searchKeyword=제목1&searchKeywordTypeCode=subject&boardId=1";
-    Map<String, String> params = Util.getParamsFormUrl(url);
+    Rq rq = new Rq("/usr/article/list?page=1&searchKeyword=제목1&searchKeywordTypeCode=subject&boardId=1");
+
+    Map<String, String> params = rq.getParams();
     System.out.println(params);
 
-    String urlPath = Util.getPathFromUrl(url);
+    String urlPath = rq.urlPath();
     System.out.println(urlPath);
+  }
+}
+
+class Rq {
+  String url;
+
+  Rq(String url) {
+    this.url = url;
+  }
+
+  public Map<String, String> getParams() {
+    return Util.getParamsFormUrl(url);
+  }
+
+  public String urlPath() {
+    return Util.getPathFromUrl(url);
   }
 }
 
