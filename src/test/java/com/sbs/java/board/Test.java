@@ -6,33 +6,47 @@ import java.util.Map;
 public class Test {
   public static void main(String[] args) {
     Rq rq = new Rq("/usr/article/list?page=1&searchKeyword=제목1&searchKeywordTypeCode=subject&boardId=1");
-
     Map<String, String> params = rq.getParams();
     System.out.println(params);
+    System.out.println(rq.getParams());
+    System.out.println(rq.getParams());
 
     String urlPath = rq.urlPath();
     System.out.println(urlPath);
+    System.out.println(rq.urlPath());
+    System.out.println(rq.urlPath());
   }
 }
 
 class Rq {
   String url;
+  Map<String, String> params;
+  String urlPath;
 
   Rq(String url) {
     this.url = url;
   }
 
   public Map<String, String> getParams() {
-    return Util.getParamsFormUrl(url);
+    if(params == null) {
+      params = Util.getParamsFormUrl(url);
+    }
+
+    return params;
   }
 
   public String urlPath() {
-    return Util.getPathFromUrl(url);
+    if(urlPath == null) {
+      urlPath = Util.getPathFromUrl(url);
+    }
+
+    return urlPath;
   }
 }
 
 class Util {
   static Map<String, String> getParamsFormUrl(String url) {
+    System.out.println("getParamsFormUrl 실행됨");
     Map<String, String> params = new HashMap<>();
     String[] urlBits = url.split("\\?", 2);
 
@@ -52,6 +66,7 @@ class Util {
   }
 
   static String getPathFromUrl(String url) {
+    System.out.println("getPathFromUrl 실행됨");
     return url.split("\\?", 2)[0];
   }
 }
