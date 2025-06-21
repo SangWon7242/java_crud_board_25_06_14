@@ -5,9 +5,12 @@ import java.util.Map;
 
 public class Test {
   public static void main(String[] args) {
-    String queryString = "/usr/article/list?page=1&searchKeyword=제목1&searchKeywordTypeCode=subject&boardId=1";
-    Map<String, String> params = Util.getParamsFormUrl(queryString);
+    String url = "/usr/article/list?page=1&searchKeyword=제목1&searchKeywordTypeCode=subject&boardId=1";
+    Map<String, String> params = Util.getParamsFormUrl(url);
     System.out.println(params);
+
+    String urlPath = Util.getPathFromUrl(url);
+    System.out.println(urlPath);
   }
 }
 
@@ -29,5 +32,9 @@ class Util {
     }
 
     return params;
+  }
+
+  static String getPathFromUrl(String url) {
+    return url.split("\\?", 2)[0];
   }
 }
