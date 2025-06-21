@@ -99,32 +99,32 @@ public class Main {
 
         Map<String, String> params = rq.getParams();
 
-        boolean orderByIdDesc = true;
-
-        if(params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
-          orderByIdDesc = false;
-        }
-
         System.out.println("== 게시물 리스트 ==");
         System.out.println("번호 | 제목");
+        
+        // new ArrayList<>(articles) : 원본 기반으로 복사본 생성
+        List<Article> sortedArticles = new ArrayList<>(articles);
 
-        if(orderByIdDesc) {
-          for(int i = articles.size() - 1; i >= 0; i--) {
-            Article article = articles.get(i);
-            System.out.printf("%d | %s\n", article.id, article.subject);
+        if(params.containsKey("orderBy")) {
+          String orderBy = params.get("orderBy");
+
+          switch (orderBy) {
+            case "idAsc" :
+              // 오름차순 : 작은 수가 앞으로
+              sortedArticles.sort((a, b) -> a.id - b.id);
+              break;
+            case "idDesc":
+            default: sortedArticles.sort((a, b) -> b.id - a.id); // 내림차순 : 큰 수가 앞으로
+              break;
           }
         }
         else {
-          /*
-          for(Article article : articles) {
-            System.out.printf("%d | %s\n", article.id, article.subject);
-          }
-          */
-
-          articles.forEach(
-              article -> System.out.printf("%d | %s\n", article.id, article.subject)
-          );
+          sortedArticles.sort((a, b) -> b.id - a.id);
         }
+
+        sortedArticles.forEach(
+            article -> System.out.printf("%d | %s\n", article.id, article.subject)
+        );
 
       } else if (rq.urlPath().equals("exit")) {
         System.out.println("프로그램을 종료합니다.");
