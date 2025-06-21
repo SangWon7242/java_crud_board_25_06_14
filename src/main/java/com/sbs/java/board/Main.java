@@ -56,7 +56,20 @@ public class Main {
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
       } else if (rq.urlPath().equals("/usr/article/detail")) {
         Map<String, String> params = rq.getParams();
-        int id = Integer.parseInt(params.get("id"));
+
+        if(!params.containsKey("id")) {
+          System.out.println("id 값을 입력해주세요.");
+          continue;
+        }
+
+        int id = 0;
+
+        try {
+          id = Integer.parseInt(params.get("id"));
+        } catch (NumberFormatException e) {
+          System.out.println("id 값을 정수 형태로 입력해주세요.");
+          continue;
+        }
 
         System.out.println("== 게시물 상세보기 ==");
 
