@@ -54,7 +54,7 @@ public class Main {
     sc.close();
   }
 
-  private static void actionArticleDoDelete(Rq rq, List<Article> articles) {
+  static void actionArticleDoDelete(Rq rq, List<Article> articles) {
     Map<String, String> params = rq.getParams();
 
     if (!params.containsKey("id")) {
@@ -71,45 +71,18 @@ public class Main {
       return;
     }
 
-    if (id > articles.size()) {
-      System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
-      return;
-    }
+    Article article = findById(articles, id);
 
-    // v1 : 스트림 사용 안한 방식
-    /*
-    Article foundArticle = null;
-
-    for(Article article : articles) {
-      if (article.id == id) {
-        foundArticle = article;
-        break;
-      }
-    }
-
-    if (foundArticle == null) {
-      System.out.println("게시물이 존재하지 않습니다.");
-      return;
-    }
-    */
-
-    // v2 : 스트림 사용 한 방식
-    int finalId = id;
-    Article foundArticle = articles.stream()
-        .filter(article -> article.id == finalId)
-        .findFirst() // 첫 번째 요소를 찾음
-        .orElse(null); // 찾지 못한 경우 null 반환
-
-    if (foundArticle == null) {
+    if (article == null) {
       System.out.println("게시물이 존재하지 않습니다.");
       return;
     }
 
-    articles.remove(foundArticle);
-    System.out.printf("%d번 게시물이 삭제되었습니다.\n", foundArticle.id);
+    articles.remove(article);
+    System.out.printf("%d번 게시물이 삭제되었습니다.\n", article.id);
   }
 
-  private static void actionArticleDoModify(Rq rq, Scanner sc, List<Article> articles) {
+  static void actionArticleDoModify(Rq rq, Scanner sc, List<Article> articles) {
     Map<String, String> params = rq.getParams();
 
     if (!params.containsKey("id")) {
@@ -126,12 +99,7 @@ public class Main {
       return;
     }
 
-    if (id > articles.size()) {
-      System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
-      return;
-    }
-
-    Article article = articles.get(id - 1);
+    Article article = findById(articles, id);
 
     if (article == null) {
       System.out.println("게시물이 존재하지 않습니다.");
@@ -143,7 +111,8 @@ public class Main {
     article.subject = sc.nextLine();
 
     System.out.print("내용 : ");
-    article.content = sc.nextLine();;
+    article.content = sc.nextLine();
+    ;
 
     System.out.printf("%d번 게시물이 수정되었습니다.\n", article.id);
   }
@@ -191,21 +160,14 @@ public class Main {
       return;
     }
 
-    System.out.println("== 게시물 상세보기 ==");
-
-    if (id > articles.size()) {
-      System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
-      return;
-    }
-
-    Article article = articles.get(id - 1);
+    Article article = findById(articles, id);
 
     if (article == null) {
       System.out.println("게시물이 존재하지 않습니다.");
       return;
     }
 
-    System.out.printf("== %d번 게시물 조회 ==\n", article.id);
+    System.out.printf("== %d번 게시물 상세보기 ==\n", article.id);
     System.out.printf("번호 : %d\n", article.id);
     System.out.printf("제목 : %s\n", article.subject);
     System.out.printf("내용 : %s\n", article.content);
@@ -275,5 +237,12 @@ public class Main {
     sortedArticles.forEach(
         article -> System.out.printf("%d | %s\n", article.id, article.subject)
     );
+  }
+
+  static Article findById(List<Article> articles, int id) {
+    return articles.stream()
+        .filter(article -> article.id == id)
+        .findFirst() // 첫 번째 요소를 찾음
+        .orElse(null); // 찾지 못한 경우 null 반환
   }
 }
