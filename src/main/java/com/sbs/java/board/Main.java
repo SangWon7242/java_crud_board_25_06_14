@@ -31,29 +31,8 @@ public class Main {
       Rq rq = new Rq(cmd);
 
       if (rq.urlPath().equals("/usr/article/write")) {
-        System.out.println("== 게시물 작성 ==");
-        System.out.print("제목 : ");
-        String subject = sc.nextLine();
-
-        if (subject.trim().isEmpty()) {
-          System.out.println("제목을 입력해주세요.");
-          continue;
-        }
-
-        System.out.print("내용 : ");
-        String content = sc.nextLine();
-
-        if (content.trim().isEmpty()) {
-          System.out.println("내용을 입력해주세요.");
-          continue;
-        }
-
-        int id = ++articleLastId;
-
-        Article article = new Article(id, subject, content);
-        articles.add(article);
-
-        System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
+        actionArticleDoWrite(rq, sc, articles, articleLastId);
+        articleLastId++;
       } else if (rq.urlPath().equals("/usr/article/detail")) {
         actionArticleShowDetail(rq, articles);
       } else if (rq.urlPath().equals("/usr/article/list")) {
@@ -71,10 +50,36 @@ public class Main {
     sc.close();
   }
 
+  private static void actionArticleDoWrite(Rq rq, Scanner sc, List<Article> articles, int articleLastId) {
+    System.out.println("== 게시물 작성 ==");
+    System.out.print("제목 : ");
+    String subject = sc.nextLine();
+
+    if (subject.trim().isEmpty()) {
+      System.out.println("제목을 입력해주세요.");
+      return;
+    }
+
+    System.out.print("내용 : ");
+    String content = sc.nextLine();
+
+    if (content.trim().isEmpty()) {
+      System.out.println("내용을 입력해주세요.");
+      return;
+    }
+
+    int id = ++articleLastId;
+
+    Article article = new Article(id, subject, content);
+    articles.add(article);
+
+    System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
+  }
+
   static void actionArticleShowDetail(Rq rq, List<Article> articles) {
     Map<String, String> params = rq.getParams();
 
-    if(!params.containsKey("id")) {
+    if (!params.containsKey("id")) {
       System.out.println("id 값을 입력해주세요.");
       return;
     }
@@ -90,7 +95,7 @@ public class Main {
 
     System.out.println("== 게시물 상세보기 ==");
 
-    if(id > articles.size()) {
+    if (id > articles.size()) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
       return;
     }
@@ -110,7 +115,7 @@ public class Main {
   }
 
   static void actionArticleShowList(Rq rq, List<Article> articles) {
-    if(articles.isEmpty()) {
+    if (articles.isEmpty()) {
       System.out.println("게시물이 존재하지 않습니다.");
       return;
     }
@@ -120,7 +125,7 @@ public class Main {
     // 검색 시작
     List<Article> filteredArticles = articles;
 
-    if(params.containsKey("searchKeyword")) {
+    if (params.containsKey("searchKeyword")) {
       String searchKeyword = params.get("searchKeyword");
 
       // v1 : 스트림 사용 안한 방식
@@ -139,7 +144,7 @@ public class Main {
           .filter(article -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword))
           .toList(); // collect(Collectors.toList()) 대신 toList() 사용
 
-      if(filteredArticles.isEmpty()) {
+      if (filteredArticles.isEmpty()) {
         System.out.printf("검색어 '%s'에 해당하는 게시물이 없습니다.\n", searchKeyword);
         return;
       }
@@ -149,20 +154,20 @@ public class Main {
     // new ArrayList<>(articles) : 원본 기반으로 복사본 생성
     List<Article> sortedArticles = new ArrayList<>(filteredArticles);
 
-    if(params.containsKey("orderBy")) {
+    if (params.containsKey("orderBy")) {
       String orderBy = params.get("orderBy");
 
       switch (orderBy) {
-        case "idAsc" :
+        case "idAsc":
           // 오름차순 : 작은 수가 앞으로
           sortedArticles.sort((a, b) -> a.id - b.id);
           break;
         case "idDesc":
-        default: sortedArticles.sort((a, b) -> b.id - a.id); // 내림차순 : 큰 수가 앞으로
+        default:
+          sortedArticles.sort((a, b) -> b.id - a.id); // 내림차순 : 큰 수가 앞으로
           break;
       }
-    }
-    else {
+    } else {
       sortedArticles.sort((a, b) -> b.id - a.id);
     }
 
