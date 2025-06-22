@@ -92,69 +92,7 @@ public class Main {
 
 
       } else if (rq.urlPath().equals("/usr/article/list")) {
-        if(articles.isEmpty()) {
-          System.out.println("게시물이 존재하지 않습니다.");
-          continue;
-        }
-
-        Map<String, String> params = rq.getParams();
-        
-        // 검색 시작
-        List<Article> filteredArticles = articles;
-    
-        if(params.containsKey("searchKeyword")) {
-          String searchKeyword = params.get("searchKeyword");
-
-          // v1 : 스트림 사용 안한 방식
-          /*
-          filteredArticles = new ArrayList<>();
-
-          for(Article article : articles) {
-            if(article.subject.contains(searchKeyword) || article.content.contains(searchKeyword)) {
-              filteredArticles.add(article);
-            }
-          }
-          */
-
-          // v2 : 스트림 사용 한 방식
-          filteredArticles = articles.stream()
-              .filter(article -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword))
-              .toList(); // collect(Collectors.toList()) 대신 toList() 사용
-
-          if(filteredArticles.isEmpty()) {
-            System.out.printf("검색어 '%s'에 해당하는 게시물이 없습니다.\n", searchKeyword);
-            continue;
-          }
-        }
-        // 검색 끝
-        
-        // new ArrayList<>(articles) : 원본 기반으로 복사본 생성
-        List<Article> sortedArticles = new ArrayList<>(filteredArticles);
-
-        if(params.containsKey("orderBy")) {
-          String orderBy = params.get("orderBy");
-
-          switch (orderBy) {
-            case "idAsc" :
-              // 오름차순 : 작은 수가 앞으로
-              sortedArticles.sort((a, b) -> a.id - b.id);
-              break;
-            case "idDesc":
-            default: sortedArticles.sort((a, b) -> b.id - a.id); // 내림차순 : 큰 수가 앞으로
-              break;
-          }
-        }
-        else {
-          sortedArticles.sort((a, b) -> b.id - a.id);
-        }
-
-        System.out.printf("== 게시물 리스트(총 %d개) ==\n", sortedArticles.size());
-        System.out.println("번호 | 제목");
-
-        sortedArticles.forEach(
-            article -> System.out.printf("%d | %s\n", article.id, article.subject)
-        );
-
+        actionArticleShowList(rq, articles);
       } else if (rq.urlPath().equals("exit")) {
         System.out.println("프로그램을 종료합니다.");
         break;
@@ -166,5 +104,70 @@ public class Main {
     System.out.println("== 자바 CRUD 게시판 종료 ==");
 
     sc.close();
+  }
+
+  static void actionArticleShowList(Rq rq, List<Article> articles) {
+    if(articles.isEmpty()) {
+      System.out.println("게시물이 존재하지 않습니다.");
+      return;
+    }
+
+    Map<String, String> params = rq.getParams();
+
+    // 검색 시작
+    List<Article> filteredArticles = articles;
+
+    if(params.containsKey("searchKeyword")) {
+      String searchKeyword = params.get("searchKeyword");
+
+      // v1 : 스트림 사용 안한 방식
+          /*
+          filteredArticles = new ArrayList<>();
+
+          for(Article article : articles) {
+            if(article.subject.contains(searchKeyword) || article.content.contains(searchKeyword)) {
+              filteredArticles.add(article);
+            }
+          }
+          */
+
+      // v2 : 스트림 사용 한 방식
+      filteredArticles = articles.stream()
+          .filter(article -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword))
+          .toList(); // collect(Collectors.toList()) 대신 toList() 사용
+
+      if(filteredArticles.isEmpty()) {
+        System.out.printf("검색어 '%s'에 해당하는 게시물이 없습니다.\n", searchKeyword);
+        return;
+      }
+    }
+    // 검색 끝
+
+    // new ArrayList<>(articles) : 원본 기반으로 복사본 생성
+    List<Article> sortedArticles = new ArrayList<>(filteredArticles);
+
+    if(params.containsKey("orderBy")) {
+      String orderBy = params.get("orderBy");
+
+      switch (orderBy) {
+        case "idAsc" :
+          // 오름차순 : 작은 수가 앞으로
+          sortedArticles.sort((a, b) -> a.id - b.id);
+          break;
+        case "idDesc":
+        default: sortedArticles.sort((a, b) -> b.id - a.id); // 내림차순 : 큰 수가 앞으로
+          break;
+      }
+    }
+    else {
+      sortedArticles.sort((a, b) -> b.id - a.id);
+    }
+
+    System.out.printf("== 게시물 리스트(총 %d개) ==\n", sortedArticles.size());
+    System.out.println("번호 | 제목");
+
+    sortedArticles.forEach(
+        article -> System.out.printf("%d | %s\n", article.id, article.subject)
+    );
   }
 }
