@@ -5,7 +5,6 @@ import com.sbs.java.board.boudedContext.article.service.ArticleService;
 import com.sbs.java.board.boudedContext.global.base.Rq;
 import com.sbs.java.board.boudedContext.global.containerr.Container;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
