@@ -10,7 +10,10 @@ import java.util.Scanner;
 import java.util.stream.IntStream;
 
 public class Main {
-  static void makeArticleTestData(List<Article> articles) {
+  static List<Article> articles = new ArrayList<>();
+  static int articleLastId = 0;
+
+  static void makeArticleTestData() {
     IntStream.rangeClosed(1, 100)
         .forEach(i -> articles.add(new Article(i, "제목" + i, "내용" + i)));
   }
@@ -18,10 +21,8 @@ public class Main {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
 
-    List<Article> articles = new ArrayList<>();
-    makeArticleTestData(articles);
+    makeArticleTestData();
 
-    int articleLastId = articles.get(articles.size() - 1).id;
     System.out.println("== 자바 CRUD 게시판 ==");
 
     while (true) {
@@ -31,16 +32,15 @@ public class Main {
       Rq rq = new Rq(cmd);
 
       if (rq.urlPath().equals("/usr/article/write")) {
-        actionArticleDoWrite(rq, sc, articles, articleLastId);
-        articleLastId++;
+        actionArticleDoWrite(rq, sc);
       } else if (rq.urlPath().equals("/usr/article/detail")) {
-        actionArticleShowDetail(rq, articles);
+        actionArticleShowDetail(rq);
       } else if (rq.urlPath().equals("/usr/article/list")) {
-        actionArticleShowList(rq, articles);
+        actionArticleShowList(rq);
       } else if (rq.urlPath().equals("/usr/article/modify")) {
-        actionArticleDoModify(rq, sc, articles);
+        actionArticleDoModify(rq, sc);
       } else if (rq.urlPath().equals("/usr/article/delete")) {
-        actionArticleDoDelete(rq, articles);
+        actionArticleDoDelete(rq);
       } else if (rq.urlPath().equals("exit")) {
         System.out.println("프로그램을 종료합니다.");
         break;
@@ -54,7 +54,7 @@ public class Main {
     sc.close();
   }
 
-  static void actionArticleDoDelete(Rq rq, List<Article> articles) {
+  static void actionArticleDoDelete(Rq rq) {
     Map<String, String> params = rq.getParams();
 
     if (!params.containsKey("id")) {
@@ -82,7 +82,7 @@ public class Main {
     System.out.printf("%d번 게시물이 삭제되었습니다.\n", article.id);
   }
 
-  static void actionArticleDoModify(Rq rq, Scanner sc, List<Article> articles) {
+  static void actionArticleDoModify(Rq rq, Scanner sc) {
     Map<String, String> params = rq.getParams();
 
     if (!params.containsKey("id")) {
@@ -117,7 +117,9 @@ public class Main {
     System.out.printf("%d번 게시물이 수정되었습니다.\n", article.id);
   }
 
-  private static void actionArticleDoWrite(Rq rq, Scanner sc, List<Article> articles, int articleLastId) {
+  private static void actionArticleDoWrite(Rq rq, Scanner sc) {
+    articleLastId = articles.get(articles.size() - 1).id;
+
     System.out.println("== 게시물 작성 ==");
     System.out.print("제목 : ");
     String subject = sc.nextLine();
@@ -143,7 +145,7 @@ public class Main {
     System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
   }
 
-  static void actionArticleShowDetail(Rq rq, List<Article> articles) {
+  static void actionArticleShowDetail(Rq rq) {
     Map<String, String> params = rq.getParams();
 
     if (!params.containsKey("id")) {
@@ -174,7 +176,7 @@ public class Main {
 
   }
 
-  static void actionArticleShowList(Rq rq, List<Article> articles) {
+  static void actionArticleShowList(Rq rq) {
     if (articles.isEmpty()) {
       System.out.println("게시물이 존재하지 않습니다.");
       return;
