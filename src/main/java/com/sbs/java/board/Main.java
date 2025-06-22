@@ -39,6 +39,8 @@ public class Main {
         actionArticleShowList(rq, articles);
       } else if (rq.urlPath().equals("/usr/article/modify")) {
         actionArticleDoModify(rq, sc, articles);
+      } else if (rq.urlPath().equals("/usr/article/delete")) {
+        actionArticleDoDelete(rq, articles);
       } else if (rq.urlPath().equals("exit")) {
         System.out.println("프로그램을 종료합니다.");
         break;
@@ -50,6 +52,61 @@ public class Main {
     System.out.println("== 자바 CRUD 게시판 종료 ==");
 
     sc.close();
+  }
+
+  private static void actionArticleDoDelete(Rq rq, List<Article> articles) {
+    Map<String, String> params = rq.getParams();
+
+    if (!params.containsKey("id")) {
+      System.out.println("id 값을 입력해주세요.");
+      return;
+    }
+
+    int id = 0;
+
+    try {
+      id = Integer.parseInt(params.get("id"));
+    } catch (NumberFormatException e) {
+      System.out.println("id 값을 정수 형태로 입력해주세요.");
+      return;
+    }
+
+    if (id > articles.size()) {
+      System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+      return;
+    }
+
+    // v1 : 스트림 사용 안한 방식
+    /*
+    Article foundArticle = null;
+
+    for(Article article : articles) {
+      if (article.id == id) {
+        foundArticle = article;
+        break;
+      }
+    }
+
+    if (foundArticle == null) {
+      System.out.println("게시물이 존재하지 않습니다.");
+      return;
+    }
+    */
+
+    // v2 : 스트림 사용 한 방식
+    int finalId = id;
+    Article foundArticle = articles.stream()
+        .filter(article -> article.id == finalId)
+        .findFirst() // 첫 번째 요소를 찾음
+        .orElse(null); // 찾지 못한 경우 null 반환
+
+    if (foundArticle == null) {
+      System.out.println("게시물이 존재하지 않습니다.");
+      return;
+    }
+
+    articles.remove(foundArticle);
+    System.out.printf("%d번 게시물이 삭제되었습니다.\n", foundArticle.id);
   }
 
   private static void actionArticleDoModify(Rq rq, Scanner sc, List<Article> articles) {
