@@ -2,11 +2,11 @@ package com.sbs.java.board;
 
 import com.sbs.java.board.boudedContext.article.Article;
 import com.sbs.java.board.boudedContext.global.base.Rq;
+import com.sbs.java.board.boudedContext.global.containerr.Container;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.stream.IntStream;
 
 public class Main {
@@ -19,26 +19,24 @@ public class Main {
   }
 
   public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-
     makeArticleTestData();
 
     System.out.println("== 자바 CRUD 게시판 ==");
 
     while (true) {
       System.out.print("명령) ");
-      String cmd = sc.nextLine();
+      String cmd = Container.sc.nextLine();
 
       Rq rq = new Rq(cmd);
 
       if (rq.urlPath().equals("/usr/article/write")) {
-        actionArticleDoWrite(rq, sc);
+        actionArticleDoWrite(rq);
       } else if (rq.urlPath().equals("/usr/article/detail")) {
         actionArticleShowDetail(rq);
       } else if (rq.urlPath().equals("/usr/article/list")) {
         actionArticleShowList(rq);
       } else if (rq.urlPath().equals("/usr/article/modify")) {
-        actionArticleDoModify(rq, sc);
+        actionArticleDoModify(rq);
       } else if (rq.urlPath().equals("/usr/article/delete")) {
         actionArticleDoDelete(rq);
       } else if (rq.urlPath().equals("exit")) {
@@ -51,7 +49,7 @@ public class Main {
 
     System.out.println("== 자바 CRUD 게시판 종료 ==");
 
-    sc.close();
+    Container.sc.close();
   }
 
   static void actionArticleDoDelete(Rq rq) {
@@ -82,7 +80,7 @@ public class Main {
     System.out.printf("%d번 게시물이 삭제되었습니다.\n", article.id);
   }
 
-  static void actionArticleDoModify(Rq rq, Scanner sc) {
+  static void actionArticleDoModify(Rq rq) {
     Map<String, String> params = rq.getParams();
 
     if (!params.containsKey("id")) {
@@ -108,21 +106,21 @@ public class Main {
 
     System.out.println("== 게시물 수정 ==");
     System.out.print("제목 : ");
-    article.subject = sc.nextLine();
+    article.subject = Container.sc.nextLine();
 
     System.out.print("내용 : ");
-    article.content = sc.nextLine();
+    article.content = Container.sc.nextLine();
     ;
 
     System.out.printf("%d번 게시물이 수정되었습니다.\n", article.id);
   }
 
-  private static void actionArticleDoWrite(Rq rq, Scanner sc) {
+  private static void actionArticleDoWrite(Rq rq) {
     articleLastId = articles.get(articles.size() - 1).id;
 
     System.out.println("== 게시물 작성 ==");
     System.out.print("제목 : ");
-    String subject = sc.nextLine();
+    String subject = Container.sc.nextLine();
 
     if (subject.trim().isEmpty()) {
       System.out.println("제목을 입력해주세요.");
@@ -130,7 +128,7 @@ public class Main {
     }
 
     System.out.print("내용 : ");
-    String content = sc.nextLine();
+    String content = Container.sc.nextLine();
 
     if (content.trim().isEmpty()) {
       System.out.println("내용을 입력해주세요.");
