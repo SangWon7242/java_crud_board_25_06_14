@@ -98,12 +98,38 @@ public class Main {
         }
 
         Map<String, String> params = rq.getParams();
+        
+        // 검색 시작
+        List<Article> filteredArticles = articles;
+    
+        if(params.containsKey("searchKeyword")) {
+          String searchKeyword = params.get("searchKeyword");
 
-        System.out.println("== 게시물 리스트 ==");
-        System.out.println("번호 | 제목");
+          // v1 : 스트림 사용 안한 방식
+          /*
+          filteredArticles = new ArrayList<>();
+
+          for(Article article : articles) {
+            if(article.subject.contains(searchKeyword) || article.content.contains(searchKeyword)) {
+              filteredArticles.add(article);
+            }
+          }
+          */
+
+          // v2 : 스트림 사용 한 방식
+          filteredArticles = articles.stream()
+              .filter(article -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword))
+              .toList(); // collect(Collectors.toList()) 대신 toList() 사용
+
+          if(filteredArticles.isEmpty()) {
+            System.out.printf("검색어 '%s'에 해당하는 게시물이 없습니다.\n", searchKeyword);
+            continue;
+          }
+        }
+        // 검색 끝
         
         // new ArrayList<>(articles) : 원본 기반으로 복사본 생성
-        List<Article> sortedArticles = new ArrayList<>(articles);
+        List<Article> sortedArticles = new ArrayList<>(filteredArticles);
 
         if(params.containsKey("orderBy")) {
           String orderBy = params.get("orderBy");
@@ -121,6 +147,9 @@ public class Main {
         else {
           sortedArticles.sort((a, b) -> b.id - a.id);
         }
+
+        System.out.printf("== 게시물 리스트(총 %d개) ==\n", sortedArticles.size());
+        System.out.println("번호 | 제목");
 
         sortedArticles.forEach(
             article -> System.out.printf("%d | %s\n", article.id, article.subject)
