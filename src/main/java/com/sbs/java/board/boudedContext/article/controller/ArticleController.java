@@ -1,29 +1,19 @@
 package com.sbs.java.board.boudedContext.article.controller;
 
 import com.sbs.java.board.boudedContext.article.Article;
+import com.sbs.java.board.boudedContext.article.service.ArticleService;
 import com.sbs.java.board.boudedContext.global.base.Rq;
 import com.sbs.java.board.boudedContext.global.containerr.Container;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class ArticleController {
-  public List<Article> articles;
-  public int articleLastId;
+  public ArticleService articleService;
 
   public ArticleController() {
-    articles = new ArrayList<>();
-
-    makeArticleTestData();
-
-    articleLastId = articles.get(articles.size() - 1).id;
-  }
-
-  void makeArticleTestData() {
-    IntStream.rangeClosed(1, 100)
-        .forEach(i -> articles.add(new Article(i, "제목" + i, "내용" + i)));
+    articleService = new ArticleService();
   }
 
   public void doWrite(Rq rq) {
@@ -44,12 +34,9 @@ public class ArticleController {
       return;
     }
 
-    int id = ++articleLastId;
+    int id = articleService.write(subject, content);
 
-    Article article = new Article(id, subject, content);
-    articles.add(article);
-
-    System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
+    System.out.printf("%d번 게시물이 등록되었습니다.\n", id);
   }
 
   public void showDetail(Rq rq) {
@@ -69,7 +56,7 @@ public class ArticleController {
       return;
     }
 
-    Article article = findById(articles, id);
+    Article article = articleService.findById(id);
 
     if (article == null) {
       System.out.println("게시물이 존재하지 않습니다.");
@@ -83,66 +70,16 @@ public class ArticleController {
   }
 
   public void showList(Rq rq) {
-    if (articles.isEmpty()) {
-      System.out.println("게시물이 존재하지 않습니다.");
-      return;
-    }
-
     Map<String, String> params = rq.getParams();
+    String searchKeyword = params.get("searchKeyword");
+    String orderBy = params.get("orderBy");
 
-    // 검색 시작
-    List<Article> filteredArticles = articles;
+    List<Article> articles = articleService.findAll(searchKeyword, orderBy);
 
-    if (params.containsKey("searchKeyword")) {
-      String searchKeyword = params.get("searchKeyword");
-
-      // v1 : 스트림 사용 안한 방식
-          /*
-          filteredArticles = new ArrayList<>();
-
-          for(Article article : articles) {
-            if(article.subject.contains(searchKeyword) || article.content.contains(searchKeyword)) {
-              filteredArticles.add(article);
-            }
-          }
-          */
-
-      // v2 : 스트림 사용 한 방식
-      filteredArticles = articles.stream()
-          .filter(article -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword))
-          .toList(); // collect(Collectors.toList()) 대신 toList() 사용
-
-      if (filteredArticles.isEmpty()) {
-        System.out.printf("검색어 '%s'에 해당하는 게시물이 없습니다.\n", searchKeyword);
-        return;
-      }
-    }
-    // 검색 끝
-
-    // new ArrayList<>(articles) : 원본 기반으로 복사본 생성
-    List<Article> sortedArticles = new ArrayList<>(filteredArticles);
-
-    if (params.containsKey("orderBy")) {
-      String orderBy = params.get("orderBy");
-
-      switch (orderBy) {
-        case "idAsc":
-          // 오름차순 : 작은 수가 앞으로
-          sortedArticles.sort((a, b) -> a.id - b.id);
-          break;
-        case "idDesc":
-        default:
-          sortedArticles.sort((a, b) -> b.id - a.id); // 내림차순 : 큰 수가 앞으로
-          break;
-      }
-    } else {
-      sortedArticles.sort((a, b) -> b.id - a.id);
-    }
-
-    System.out.printf("== 게시물 리스트(총 %d개) ==\n", sortedArticles.size());
+    System.out.printf("== 게시물 리스트(총 %d개) ==\n", articles.size());
     System.out.println("번호 | 제목");
 
-    sortedArticles.forEach(
+    articles.forEach(
         article -> System.out.printf("%d | %s\n", article.id, article.subject)
     );
   }
@@ -164,7 +101,7 @@ public class ArticleController {
       return;
     }
 
-    Article article = findById(articles, id);
+    Article article = articleService.findById(id);
 
     if (article == null) {
       System.out.println("게시물이 존재하지 않습니다.");
@@ -173,11 +110,12 @@ public class ArticleController {
 
     System.out.println("== 게시물 수정 ==");
     System.out.print("제목 : ");
-    article.subject = Container.sc.nextLine();
+    String subject = Container.sc.nextLine();
 
     System.out.print("내용 : ");
-    article.content = Container.sc.nextLine();
+    String content = Container.sc.nextLine();
 
+    articleService.modify(id, subject, content);
     System.out.printf("%d번 게시물이 수정되었습니다.\n", article.id);
   }
 
@@ -198,21 +136,15 @@ public class ArticleController {
       return;
     }
 
-    Article article = findById(articles, id);
+    Article article = articleService.findById(id);
 
     if (article == null) {
       System.out.println("게시물이 존재하지 않습니다.");
       return;
     }
 
-    articles.remove(article);
-    System.out.printf("%d번 게시물이 삭제되었습니다.\n", article.id);
-  }
+    articleService.delete(id);
 
-  public Article findById(List<Article> articles, int id) {
-    return articles.stream()
-        .filter(article -> article.id == id)
-        .findFirst() // 첫 번째 요소를 찾음
-        .orElse(null); // 찾지 못한 경우 null 반환
+    System.out.printf("%d번 게시물이 삭제되었습니다.\n", article.id);
   }
 }
