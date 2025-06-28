@@ -35,35 +35,46 @@ public class ArticleRepository {
   }
 
   public List<Article> findAll(String searchKeyword, String orderBy) {
-    // 검색 시작
-    List<Article> filteredArticles = new ArrayList<>(articles);
+    List<Article> result = new ArrayList<>(articles);
 
-    if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
-      filteredArticles = articles.stream()
-          .filter(article -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword))
-          .collect(Collectors.toList());
-    }
-    // 검색 끝
+    // 검색 적용
+    result = applySearch(result, searchKeyword);
 
-    // 정렬 시작
-    List<Article> sortedArticles = filteredArticles;
+    // 정렬 적용
+    result = applySorting(result, orderBy);
 
+    return result;
+  }
+
+  // 정렬 기능을 수행하는 메서드
+  private List<Article> applySorting(List<Article> articles, String orderBy) {
     if (orderBy != null && !orderBy.trim().isEmpty()) {
       switch (orderBy) {
         case "idAsc":
           // 오름차순 : 작은 수가 앞으로
-          sortedArticles.sort((a, b) -> a.id - b.id);
+          articles.sort((a, b) -> a.id - b.id);
           break;
         case "idDesc":
         default:
-          sortedArticles.sort((a, b) -> b.id - a.id); // 내림차순 : 큰 수가 앞으로
+          articles.sort((a, b) -> b.id - a.id); // 내림차순 : 큰 수가 앞으로
           break;
       }
     } else {
-      sortedArticles.sort((a, b) -> b.id - a.id);
+      articles.sort((a, b) -> b.id - a.id);
     }
 
-    return sortedArticles;
+    return articles;
+  }
+
+  // 검색 기능을 수행하는 메서드
+  private List<Article> applySearch(List<Article> articles, String searchKeyword) {
+    if (searchKeyword == null || searchKeyword.trim().isEmpty()) {
+      return articles;
+    }
+
+    return articles.stream()
+        .filter(article -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword))
+        .collect(Collectors.toList());
   }
 
   public void modify(int id, String subject, String content) {
