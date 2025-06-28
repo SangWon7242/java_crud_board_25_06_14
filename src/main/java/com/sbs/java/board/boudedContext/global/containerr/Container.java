@@ -3,6 +3,7 @@ package com.sbs.java.board.boudedContext.global.containerr;
 import com.sbs.java.board.boudedContext.article.controller.ArticleController;
 import com.sbs.java.board.boudedContext.article.repository.ArticleRepository;
 import com.sbs.java.board.boudedContext.article.service.ArticleService;
+import com.sbs.java.board.boudedContext.member.controller.MemberController;
 
 import java.util.Scanner;
 
@@ -14,6 +15,8 @@ public class Container {
 
   public static ArticleService articleService;
 
+
+  public static MemberController memberController;
   public static ArticleController articleController;
 
   // static은 프로그램 시작 시 한 번만 실행된다.
@@ -24,6 +27,7 @@ public class Container {
 
     articleService = new ArticleService();
 
+    memberController = new MemberController();
     articleController = new ArticleController();
   }
 }

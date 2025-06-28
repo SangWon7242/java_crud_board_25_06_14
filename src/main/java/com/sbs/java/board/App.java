@@ -3,11 +3,14 @@ package com.sbs.java.board;
 import com.sbs.java.board.boudedContext.article.controller.ArticleController;
 import com.sbs.java.board.boudedContext.global.base.Rq;
 import com.sbs.java.board.boudedContext.global.containerr.Container;
+import com.sbs.java.board.boudedContext.member.controller.MemberController;
 
 public class App {
+  public MemberController memberController;
   public ArticleController articleController;
 
   public App() {
+    memberController = Container.memberController;
     articleController = Container.articleController;
   }
 
@@ -35,6 +38,8 @@ public class App {
         articleController.doModify(rq);
       } else if (rq.urlPath().equals("/usr/article/delete")) {
         articleController.doDelete(rq);
+      } else if (rq.urlPath().equals("/usr/member/join")) {
+        memberController.doJoin(rq);
       } else if (rq.urlPath().equals("exit")) {
         System.out.println("프로그램을 종료합니다.");
         break;
