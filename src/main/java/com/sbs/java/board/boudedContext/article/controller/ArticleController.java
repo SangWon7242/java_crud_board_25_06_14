@@ -6,7 +6,6 @@ import com.sbs.java.board.boudedContext.global.base.Rq;
 import com.sbs.java.board.boudedContext.global.containerr.Container;
 
 import java.util.List;
-import java.util.Map;
 
 public class ArticleController {
   public ArticleService articleService;
@@ -53,10 +52,10 @@ public class ArticleController {
       return;
     }
 
-    System.out.printf("== %d번 게시물 상세보기 ==\n", article.id);
-    System.out.printf("번호 : %d\n", article.id);
-    System.out.printf("제목 : %s\n", article.subject);
-    System.out.printf("내용 : %s\n", article.content);
+    System.out.printf("== %d번 게시물 상세보기 ==\n", article.getId());
+    System.out.printf("번호 : %d\n", article.getId());
+    System.out.printf("제목 : %s\n", article.getSubject());
+    System.out.printf("내용 : %s\n", article.getContent());
   }
 
   public void showList(Rq rq) {
@@ -69,7 +68,7 @@ public class ArticleController {
     System.out.println("번호 | 제목");
 
     articles.forEach(
-        article -> System.out.printf("%d | %s\n", article.id, article.subject)
+        article -> System.out.printf("%d | %s\n", article.getId(), article.getSubject())
     );
   }
 
@@ -96,7 +95,7 @@ public class ArticleController {
     String content = Container.sc.nextLine();
 
     articleService.modify(id, subject, content);
-    System.out.printf("%d번 게시물이 수정되었습니다.\n", article.id);
+    System.out.printf("%d번 게시물이 수정되었습니다.\n", article.getId());
   }
 
   public void doDelete(Rq rq) {
@@ -116,6 +115,6 @@ public class ArticleController {
 
     articleService.delete(id);
 
-    System.out.printf("%d번 게시물이 삭제되었습니다.\n", article.id);
+    System.out.printf("%d번 게시물이 삭제되었습니다.\n", article.getId());
   }
 }

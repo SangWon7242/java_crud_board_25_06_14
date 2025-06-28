@@ -17,7 +17,7 @@ public class ArticleRepository {
 
     makeTestData();
 
-    articleLastId = articles.get(articles.size() - 1).id;
+    articleLastId = articles.get(articles.size() - 1).getId();
   }
 
   void makeTestData() {
@@ -52,11 +52,11 @@ public class ArticleRepository {
       switch (orderBy) {
         case "idAsc":
           // 오름차순 : 작은 수가 앞으로
-          articles.sort((a, b) -> a.id - b.id);
+          articles.sort((a, b) -> a.getId() - b.getId());
           break;
         case "idDesc":
         default:
-          articles.sort((a, b) -> b.id - a.id); // 내림차순 : 큰 수가 앞으로
+          articles.sort((a, b) -> b.getId() - a.getId()); // 내림차순 : 큰 수가 앞으로
           break;
       }
     }
@@ -71,7 +71,7 @@ public class ArticleRepository {
     }
 
     return articles.stream()
-        .filter(article -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword))
+        .filter(article -> article.getSubject().contains(searchKeyword) || article.getContent().contains(searchKeyword))
         .collect(Collectors.toList());
   }
 
@@ -80,8 +80,8 @@ public class ArticleRepository {
 
     if (article == null) return;
 
-    article.subject = subject;
-    article.content = content;
+    article.setSubject(subject);
+    article.setContent(content);
   }
 
   public void delete(int id) {
@@ -94,7 +94,7 @@ public class ArticleRepository {
 
   public Article findById(int id) {
     return articles.stream()
-        .filter(article -> article.id == id)
+        .filter(article -> article.getId() == id)
         .findFirst() // 첫 번째 요소를 찾음
         .orElse(null); // 찾지 못한 경우 null 반환
   }
