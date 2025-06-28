@@ -20,6 +20,7 @@ public class MemberController {
     String password;
     String passwordConfirm;
     String name;
+    Member member;
 
     System.out.println("== 회원 가입 ==");
 
@@ -30,6 +31,13 @@ public class MemberController {
 
       if(username.trim().isEmpty()) {
         System.out.println("로그인 아이디를 입력해주세요.");
+        continue;
+      }
+
+      member = memberService.findByUsername(username);
+
+      if(member != null) {
+        System.out.printf("'%s'(은)는 이미 사용 중인 아이디입니다. 다른 아이디를 입력해주세요.\n", username);
         continue;
       }
 
