@@ -91,4 +91,52 @@ public class MemberController {
 
     System.out.printf("'%s'님 회원 가입이 완료되었습니다.\n", username);
   }
+
+  public void doLogin(Rq rq) {
+    String username;
+    String password;
+    Member member;
+
+    System.out.println("== 로그인 ==");
+
+    // 로그인 아이디 입력
+    while (true) {
+      System.out.print("로그인 아이디 : ");
+      username = Container.sc.nextLine();
+
+      if(username.trim().isEmpty()) {
+        System.out.println("로그인 아이디를 입력해주세요.");
+        continue;
+      }
+
+      member = memberService.findByUsername(username);
+
+      if(member == null) {
+        System.out.printf("'%s'(은)는 존재하지 않는 아이디입니다.\n", username);
+        continue;
+      }
+
+      break;
+    }
+
+    // 로그인 비밀번호 입력
+    while (true) {
+      System.out.print("로그인 비밀번호 : ");
+      password = Container.sc.nextLine();
+
+      if(password.trim().isEmpty()) {
+        System.out.println("로그인 비밀번호를 입력해주세요.");
+        continue;
+      }
+
+      if(!member.getPassword().equals(password)) {
+        System.out.println("로그인 비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+        continue;
+      }
+
+      break;
+    }
+
+    System.out.println("로그인 되었습니다.");
+  }
 }
