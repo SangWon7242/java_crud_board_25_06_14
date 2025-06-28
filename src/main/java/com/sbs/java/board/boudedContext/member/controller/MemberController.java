@@ -5,9 +5,6 @@ import com.sbs.java.board.boudedContext.global.containerr.Container;
 import com.sbs.java.board.boudedContext.member.dto.Member;
 import com.sbs.java.board.boudedContext.member.service.MemberService;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MemberController {
   private MemberService memberService;
 

@@ -9,28 +9,23 @@ import java.util.stream.IntStream;
 
 public class ArticleRepository {
   private List<Article> articles;
-  private int lastId;
 
   public ArticleRepository() {
     articles = new ArrayList<>();
 
     makeTestData();
-
-    lastId = articles.get(articles.size() - 1).getId();
   }
 
   void makeTestData() {
     IntStream.rangeClosed(1, 100)
-        .forEach(i -> articles.add(new Article(i, "제목" + i, "내용" + i)));
+        .forEach(i -> write("제목 " + i, "내용 " + i));
   }
 
   public int write(String subject, String content) {
-    int id = ++lastId;
-
-    Article article = new Article(id, subject, content);
+    Article article = new Article(subject, content);
     articles.add(article);
 
-    return id;
+    return article.getId();
   }
 
   public List<Article> findAll(String searchKeyword, String orderBy) {
