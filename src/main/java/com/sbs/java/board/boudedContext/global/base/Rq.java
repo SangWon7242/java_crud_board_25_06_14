@@ -1,13 +1,30 @@
 package com.sbs.java.board.boudedContext.global.base;
 
 import com.sbs.java.board.boudedContext.global.standard.Ut;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Map;
 
 public class Rq {
+  @Getter
   public String url;
+  @Getter
   public Map<String, String> params;
+  @Getter
   public String urlPath;
+
+  @Getter
+  @Setter
+  String controllerTypeCode;
+
+  @Getter
+  @Setter
+  String controllerName;
+
+  @Getter
+  @Setter
+  String actionMethodName;
 
   public Rq(String url) {
     this.url = url;
@@ -15,8 +32,18 @@ public class Rq {
     urlPath = Ut.getPathFromUrl(url);
   }
 
-  public Map<String, String> getParams() {
-    return params;
+
+  public String getActionPath() {
+    String[] commandBits = urlPath.split("/");
+
+    // /usr/article/write
+    // ['', 'usr', 'article', 'write']
+
+    controllerTypeCode = commandBits[1];
+    controllerName = commandBits[2];
+    actionMethodName = commandBits[3];
+
+    return "/%s/%s/%s".formatted(controllerTypeCode, controllerName, actionMethodName);
   }
 
   public String urlPath() {

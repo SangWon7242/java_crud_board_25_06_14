@@ -2,14 +2,24 @@ package com.sbs.java.board.boudedContext.member.controller;
 
 import com.sbs.java.board.boudedContext.global.base.Rq;
 import com.sbs.java.board.boudedContext.global.containerr.Container;
+import com.sbs.java.board.boudedContext.global.controller.Controller;
 import com.sbs.java.board.boudedContext.member.dto.Member;
 import com.sbs.java.board.boudedContext.member.service.MemberService;
 
-public class MemberController {
+public class MemberController implements Controller {
   private MemberService memberService;
 
   public MemberController() {
     memberService = Container.memberService;
+  }
+
+  @Override
+  public void doAction(Rq rq) {
+    if(rq.getActionPath().equals("/usr/member/join")) {
+      doJoin(rq);
+    } else if (rq.getActionPath().equals("/usr/member/login")) {
+      doLogin(rq);
+    }
   }
 
   public void doJoin(Rq rq) {

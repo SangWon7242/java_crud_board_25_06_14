@@ -4,14 +4,30 @@ import com.sbs.java.board.boudedContext.article.Article;
 import com.sbs.java.board.boudedContext.article.service.ArticleService;
 import com.sbs.java.board.boudedContext.global.base.Rq;
 import com.sbs.java.board.boudedContext.global.containerr.Container;
+import com.sbs.java.board.boudedContext.global.controller.Controller;
 
 import java.util.List;
 
-public class ArticleController {
+public class ArticleController implements Controller {
   private ArticleService articleService;
 
   public ArticleController() {
     articleService = new ArticleService();
+  }
+
+  @Override
+  public void doAction(Rq rq) {
+    if(rq.getActionPath().equals("/usr/article/write")) {
+      doWrite(rq);
+    } else if (rq.getActionPath().equals("/usr/article/detail")) {
+      showDetail(rq);
+    } else if (rq.getActionPath().equals("/usr/article/list")) {
+      showList(rq);
+    } else if (rq.getActionPath().equals("/usr/article/modify")) {
+      doModify(rq);
+    } else if (rq.getActionPath().equals("/usr/article/delete")) {
+      doDelete(rq);
+    }
   }
 
   public void doWrite(Rq rq) {
