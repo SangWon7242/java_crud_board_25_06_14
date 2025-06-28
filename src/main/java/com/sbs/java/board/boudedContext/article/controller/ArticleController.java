@@ -8,7 +8,7 @@ import com.sbs.java.board.boudedContext.global.containerr.Container;
 import java.util.List;
 
 public class ArticleController {
-  public ArticleService articleService;
+  private ArticleService articleService;
 
   public ArticleController() {
     articleService = new ArticleService();

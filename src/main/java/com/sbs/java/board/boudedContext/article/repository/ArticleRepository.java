@@ -8,16 +8,15 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ArticleRepository {
-  public List<Article> articles;
-  public int articleLastId;
-
+  private List<Article> articles;
+  private int lastId;
 
   public ArticleRepository() {
     articles = new ArrayList<>();
 
     makeTestData();
 
-    articleLastId = articles.get(articles.size() - 1).getId();
+    lastId = articles.get(articles.size() - 1).getId();
   }
 
   void makeTestData() {
@@ -26,7 +25,7 @@ public class ArticleRepository {
   }
 
   public int write(String subject, String content) {
-    int id = ++articleLastId;
+    int id = ++lastId;
 
     Article article = new Article(id, subject, content);
     articles.add(article);

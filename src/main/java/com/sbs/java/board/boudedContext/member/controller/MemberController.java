@@ -3,15 +3,16 @@ package com.sbs.java.board.boudedContext.member.controller;
 import com.sbs.java.board.boudedContext.global.base.Rq;
 import com.sbs.java.board.boudedContext.global.containerr.Container;
 import com.sbs.java.board.boudedContext.member.dto.Member;
+import com.sbs.java.board.boudedContext.member.service.MemberService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MemberController {
-  public List<Member> members;
+  private MemberService memberService;
 
   public MemberController() {
-    members = new ArrayList<>();
+    memberService = Container.memberService;
   }
 
   public void doJoin(Rq rq) {
@@ -78,9 +79,8 @@ public class MemberController {
       break;
     }
 
-    Member member = new Member(username, password, name);
-    members.add(member);
+    memberService.join(username, password, name);
 
-    System.out.printf("'%s'님 회원 가입이 완료되었습니다.\n", member.getUsername());
+    System.out.printf("'%s'님 회원 가입이 완료되었습니다.\n", username);
   }
 }

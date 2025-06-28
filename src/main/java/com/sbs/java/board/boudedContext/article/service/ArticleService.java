@@ -7,7 +7,7 @@ import com.sbs.java.board.boudedContext.global.containerr.Container;
 import java.util.List;
 
 public class ArticleService {
-  public ArticleRepository articleRepository;
+  private ArticleRepository articleRepository;
 
   public ArticleService() {
     articleRepository = Container.articleRepository;

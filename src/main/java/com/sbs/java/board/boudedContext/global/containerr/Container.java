@@ -4,6 +4,8 @@ import com.sbs.java.board.boudedContext.article.controller.ArticleController;
 import com.sbs.java.board.boudedContext.article.repository.ArticleRepository;
 import com.sbs.java.board.boudedContext.article.service.ArticleService;
 import com.sbs.java.board.boudedContext.member.controller.MemberController;
+import com.sbs.java.board.boudedContext.member.repository.MemberRepository;
+import com.sbs.java.board.boudedContext.member.service.MemberService;
 
 import java.util.Scanner;
 
@@ -11,10 +13,11 @@ import java.util.Scanner;
 public class Container {
   public static Scanner sc;
 
+  public static MemberRepository memberRepository;
   public static ArticleRepository articleRepository;
 
+  public static MemberService memberService;
   public static ArticleService articleService;
-
 
   public static MemberController memberController;
   public static ArticleController articleController;
@@ -23,8 +26,10 @@ public class Container {
   static {
     sc = new Scanner(System.in);
 
+    memberRepository = new MemberRepository();
     articleRepository = new ArticleRepository();
 
+    memberService = new MemberService();
     articleService = new ArticleService();
 
     memberController = new MemberController();
