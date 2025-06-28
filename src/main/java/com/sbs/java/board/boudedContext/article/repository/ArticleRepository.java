@@ -59,8 +59,6 @@ public class ArticleRepository {
           articles.sort((a, b) -> b.id - a.id); // 내림차순 : 큰 수가 앞으로
           break;
       }
-    } else {
-      articles.sort((a, b) -> b.id - a.id);
     }
 
     return articles;

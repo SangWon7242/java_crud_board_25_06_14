@@ -39,19 +39,10 @@ public class ArticleController {
   }
 
   public void showDetail(Rq rq) {
-    Map<String, String> params = rq.getParams();
+    int id = rq.getIntParam("id", 0);
 
-    if (!params.containsKey("id")) {
+    if(id == 0) {
       System.out.println("id 값을 입력해주세요.");
-      return;
-    }
-
-    int id = 0;
-
-    try {
-      id = Integer.parseInt(params.get("id"));
-    } catch (NumberFormatException e) {
-      System.out.println("id 값을 정수 형태로 입력해주세요.");
       return;
     }
 
@@ -69,9 +60,8 @@ public class ArticleController {
   }
 
   public void showList(Rq rq) {
-    Map<String, String> params = rq.getParams();
-    String searchKeyword = params.get("searchKeyword");
-    String orderBy = params.get("orderBy");
+    String searchKeyword = rq.getParam("searchKeyword", "");
+    String orderBy = rq.getParam("orderBy", "idDesc");
 
     List<Article> articles = articleService.findAll(searchKeyword, orderBy);
 
@@ -84,19 +74,10 @@ public class ArticleController {
   }
 
   public void doModify(Rq rq) {
-    Map<String, String> params = rq.getParams();
+    int id = rq.getIntParam("id", 0);
 
-    if (!params.containsKey("id")) {
+    if(id == 0) {
       System.out.println("id 값을 입력해주세요.");
-      return;
-    }
-
-    int id = 0;
-
-    try {
-      id = Integer.parseInt(params.get("id"));
-    } catch (NumberFormatException e) {
-      System.out.println("id 값을 정수 형태로 입력해주세요.");
       return;
     }
 
@@ -119,19 +100,10 @@ public class ArticleController {
   }
 
   public void doDelete(Rq rq) {
-    Map<String, String> params = rq.getParams();
+    int id = rq.getIntParam("id", 0);
 
-    if (!params.containsKey("id")) {
+    if(id == 0) {
       System.out.println("id 값을 입력해주세요.");
-      return;
-    }
-
-    int id = 0;
-
-    try {
-      id = Integer.parseInt(params.get("id"));
-    } catch (NumberFormatException e) {
-      System.out.println("id 값을 정수 형태로 입력해주세요.");
       return;
     }
 
