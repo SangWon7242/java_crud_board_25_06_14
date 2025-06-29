@@ -3,7 +3,11 @@ package com.sbs.java.board;
 import com.sbs.java.board.boudedContext.global.base.Rq;
 import com.sbs.java.board.boudedContext.global.containerr.Container;
 import com.sbs.java.board.boudedContext.global.controller.Controller;
+import com.sbs.java.board.boudedContext.global.interceptor.Interceptor;
 import com.sbs.java.board.boudedContext.member.dto.Member;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class App {
   public void run() {
@@ -26,6 +30,8 @@ public class App {
 
       rq.setCommand(cmd);
       rq.getActionPath();
+
+      if(!runInterceptor(rq)) continue;
 
       Controller controller = getControllerByRequestUri(rq);
 
@@ -56,5 +62,20 @@ public class App {
     }
 
     return null;
+  }
+
+  private boolean runInterceptor(Rq rq) {
+    List<Interceptor> interceptors = new ArrayList<>();
+
+    interceptors.add(Container.needLoginInterceptor);
+    interceptors.add(Container.needLogoutInterceptor);
+
+    for( Interceptor interceptor : interceptors) {
+      if (!interceptor.run(rq)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
