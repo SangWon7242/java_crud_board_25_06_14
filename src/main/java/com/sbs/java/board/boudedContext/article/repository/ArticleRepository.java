@@ -19,14 +19,14 @@ public class ArticleRepository {
 
   void makeTestData() {
     IntStream.rangeClosed(1, 100)
-        .forEach(i -> write("제목 " + i, "내용 " + i, 1, "User One"));
+        .forEach(i -> write("제목 " + i, "내용 " + i, 1, 1, "User One", "공지사항"));
   }
 
-  public int write(String subject, String content, int memberId, String writerName) {
+  public int write(String subject, String content, int memberId, int boardId, String writerName, String boardName) {
     String regDate = Ut.getNowDateStr();
     String updateDate = Ut.getNowDateStr();
 
-    Article article = new Article(regDate, updateDate, subject, content, memberId, writerName);
+    Article article = new Article(regDate, updateDate, subject, content, memberId, boardId, writerName, boardName);
     articles.add(article);
 
     return article.getId();

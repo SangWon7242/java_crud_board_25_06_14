@@ -3,6 +3,8 @@ package com.sbs.java.board.boudedContext.global.containerr;
 import com.sbs.java.board.boudedContext.article.controller.ArticleController;
 import com.sbs.java.board.boudedContext.article.repository.ArticleRepository;
 import com.sbs.java.board.boudedContext.article.service.ArticleService;
+import com.sbs.java.board.boudedContext.board.repository.BoardRepository;
+import com.sbs.java.board.boudedContext.board.service.BoardService;
 import com.sbs.java.board.boudedContext.global.interceptor.NeedLoginInterceptor;
 import com.sbs.java.board.boudedContext.global.interceptor.NeedLogoutInterceptor;
 import com.sbs.java.board.boudedContext.global.session.Session;
@@ -20,9 +22,11 @@ public class Container {
   public static NeedLoginInterceptor needLoginInterceptor;
   public static NeedLogoutInterceptor needLogoutInterceptor;
 
+  public static BoardRepository boardRepository;
   public static MemberRepository memberRepository;
   public static ArticleRepository articleRepository;
 
+  public static BoardService boardService;
   public static MemberService memberService;
   public static ArticleService articleService;
 
@@ -37,9 +41,11 @@ public class Container {
     needLoginInterceptor = new NeedLoginInterceptor();
     needLogoutInterceptor = new NeedLogoutInterceptor();
 
+    boardRepository = new BoardRepository();
     memberRepository = new MemberRepository();
     articleRepository = new ArticleRepository();
 
+    boardService = new BoardService();
     memberService = new MemberService();
     articleService = new ArticleService();
 

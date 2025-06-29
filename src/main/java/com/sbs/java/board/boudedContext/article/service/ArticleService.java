@@ -13,10 +13,11 @@ public class ArticleService {
     articleRepository = Container.articleRepository;
   }
 
-  public int write(String subject, String content, int memberId) {
+  public int write(String subject, String content, int memberId, int boardId) {
     String writerName = Container.memberService.findById(memberId).getName();
+    String boardName = Container.boardService.findById(boardId).getName();
 
-    return articleRepository.write(subject, content, memberId, writerName);
+    return articleRepository.write(subject, content, memberId, boardId, writerName, boardName);
   }
 
   public List<Article> findAll(String searchKeyword, String orderBy) {

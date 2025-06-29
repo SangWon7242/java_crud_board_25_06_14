@@ -2,6 +2,8 @@ package com.sbs.java.board.boudedContext.article.controller;
 
 import com.sbs.java.board.boudedContext.article.Article;
 import com.sbs.java.board.boudedContext.article.service.ArticleService;
+import com.sbs.java.board.boudedContext.board.dto.Board;
+import com.sbs.java.board.boudedContext.board.service.BoardService;
 import com.sbs.java.board.boudedContext.global.base.Rq;
 import com.sbs.java.board.boudedContext.global.containerr.Container;
 import com.sbs.java.board.boudedContext.global.controller.Controller;
@@ -10,15 +12,17 @@ import com.sbs.java.board.boudedContext.member.dto.Member;
 import java.util.List;
 
 public class ArticleController implements Controller {
+  private BoardService boardService;
   private ArticleService articleService;
 
   public ArticleController() {
-    articleService = new ArticleService();
+    boardService = Container.boardService;
+    articleService = Container.articleService;
   }
 
   @Override
   public void doAction(Rq rq) {
-    if(rq.getActionPath().equals("/usr/article/write")) {
+    if (rq.getActionPath().equals("/usr/article/write")) {
       doWrite(rq);
     } else if (rq.getActionPath().equals("/usr/article/detail")) {
       showDetail(rq);
@@ -32,7 +36,16 @@ public class ArticleController implements Controller {
   }
 
   public void doWrite(Rq rq) {
-    System.out.println("== 게시물 작성 ==");
+    int boardId = rq.getIntParam("boardId", 0);
+
+    if (boardId == 0) {
+      System.out.println("boardId 값을 입력해주세요.");
+      return;
+    }
+
+    Board board = boardService.findById(boardId);
+
+    System.out.printf("== (%s 게시판) 게시물 작성 ==\n", board.getName());
     System.out.print("제목 : ");
     String subject = Container.sc.nextLine();
 
@@ -52,7 +65,7 @@ public class ArticleController implements Controller {
     Member member = rq.getLoginedMember();
     int memberId = member.getId();
 
-    int id = articleService.write(subject, content, memberId);
+    int id = articleService.write(subject, content, memberId, boardId);
 
     System.out.printf("%d번 게시물이 등록되었습니다.\n", id);
   }
@@ -60,7 +73,7 @@ public class ArticleController implements Controller {
   public void showDetail(Rq rq) {
     int id = rq.getIntParam("id", 0);
 
-    if(id == 0) {
+    if (id == 0) {
       System.out.println("id 값을 입력해주세요.");
       return;
     }
@@ -72,7 +85,7 @@ public class ArticleController implements Controller {
       return;
     }
 
-    System.out.printf("== %d번 게시물 상세보기 ==\n", article.getId());
+    System.out.printf("== (%s 게시판) %d번 게시물 상세보기 ==\n", article.getBoardName(), article.getId());
     System.out.printf("번호 : %d\n", article.getId());
     System.out.printf("작성일 : %s\n", article.getRegDate());
     System.out.printf("수정일 : %s\n", article.getUpdateDate());
@@ -102,7 +115,7 @@ public class ArticleController implements Controller {
   public void doModify(Rq rq) {
     int id = rq.getIntParam("id", 0);
 
-    if(id == 0) {
+    if (id == 0) {
       System.out.println("id 값을 입력해주세요.");
       return;
     }
@@ -116,7 +129,7 @@ public class ArticleController implements Controller {
 
     Member member = rq.getLoginedMember();
 
-    if(article.getMemberId() != member.getId()) {
+    if (article.getMemberId() != member.getId()) {
       System.out.println("수정에 대한 권한이 없습니다.");
       return;
     }
@@ -135,7 +148,7 @@ public class ArticleController implements Controller {
   public void doDelete(Rq rq) {
     int id = rq.getIntParam("id", 0);
 
-    if(id == 0) {
+    if (id == 0) {
       System.out.println("id 값을 입력해주세요.");
       return;
     }
@@ -149,7 +162,7 @@ public class ArticleController implements Controller {
 
     Member member = rq.getLoginedMember();
 
-    if(article.getMemberId() != member.getId()) {
+    if (article.getMemberId() != member.getId()) {
       System.out.println("삭제에 대한 권한이 없습니다.");
       return;
     }

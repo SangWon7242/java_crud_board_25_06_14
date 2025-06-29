@@ -15,13 +15,22 @@ public class Article {
   private String subject;
   private String content;
   private int memberId;
+  private int boardId;
   private String writerName;
+  private String boardName;
 
   static {
     lastId = 0;
   }
 
-  public Article(String regDate, String updateDate, String subject, String content, int memberId, String writerName) {
-    this(++lastId, regDate, updateDate, subject, content, memberId, writerName);
+  public Article(String regDate,
+                 String updateDate,
+                 String subject,
+                 String content,
+                 int memberId,
+                 int boardId,
+                 String writerName,
+                 String boardName) {
+    this(++lastId, regDate, updateDate, subject, content, memberId, boardId, writerName, boardName);
   }
 }
