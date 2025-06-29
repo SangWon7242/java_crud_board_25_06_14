@@ -3,6 +3,7 @@ package com.sbs.java.board;
 import com.sbs.java.board.boudedContext.global.base.Rq;
 import com.sbs.java.board.boudedContext.global.containerr.Container;
 import com.sbs.java.board.boudedContext.global.controller.Controller;
+import com.sbs.java.board.boudedContext.member.dto.Member;
 
 public class App {
   public void run() {
@@ -10,11 +11,20 @@ public class App {
     System.out.println("== 자바 CRUD 게시판 ==");
 
     while (true) {
-      System.out.print("명령) ");
+      Rq rq = new Rq();
+
+      Member member = (Member) rq.getSessionAttr("loginedMember");
+      String promptName = "명령";
+
+      if(member != null) {
+        promptName = member.getUsername();
+      }
+
+      System.out.printf("%s) ", promptName);
+
       String cmd = Container.sc.nextLine();
 
-      Rq rq = new Rq(cmd);
-
+      rq.setCommand(cmd);
       rq.getActionPath();
 
       Controller controller = getControllerByRequestUri(rq);

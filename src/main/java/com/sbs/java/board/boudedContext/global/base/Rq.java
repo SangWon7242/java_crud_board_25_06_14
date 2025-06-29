@@ -3,6 +3,7 @@ package com.sbs.java.board.boudedContext.global.base;
 import com.sbs.java.board.boudedContext.global.containerr.Container;
 import com.sbs.java.board.boudedContext.global.session.Session;
 import com.sbs.java.board.boudedContext.global.standard.Ut;
+import com.sbs.java.board.boudedContext.member.dto.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,15 +32,16 @@ public class Rq {
   Session session;
   String loginedMember;
 
-  public Rq(String url) {
-    this.url = url;
-    params =  Ut.getParamsFormUrl(url);
-    urlPath = Ut.getPathFromUrl(url);
-
+  public Rq() {
     session = Container.session;
     loginedMember = "loginedMember";
   }
 
+  public void setCommand(String url) {
+    this.url = url;
+    params =  Ut.getParamsFormUrl(url);
+    urlPath = Ut.getPathFromUrl(url);
+  }
 
   public String getActionPath() {
     String[] commandBits = urlPath.split("/");
@@ -98,5 +100,13 @@ public class Rq {
 
   public void removeSessionAttr(String key) {
     session.removeAttribute(key);
+  }
+
+  public void login(Member member) {
+    setSessionAttr(loginedMember, member);
+  }
+
+  public void logout() {
+    removeSessionAttr(loginedMember);
   }
 }
