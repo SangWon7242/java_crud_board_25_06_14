@@ -13,7 +13,7 @@ public class App {
     while (true) {
       Rq rq = new Rq();
 
-      Member member = (Member) rq.getSessionAttr("loginedMember");
+      Member member = rq.getLoginedMember();
       String promptName = "명령";
 
       if(member != null) {

@@ -109,4 +109,8 @@ public class Rq {
   public void logout() {
     removeSessionAttr(loginedMember);
   }
+
+  public Member getLoginedMember() {
+    return (Member) getSessionAttr(loginedMember);
+  }
 }

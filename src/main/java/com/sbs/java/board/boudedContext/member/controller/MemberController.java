@@ -32,7 +32,7 @@ public class MemberController implements Controller {
       return;
     }
 
-    Member member = (Member) rq.getSessionAttr("loginedMember");
+    Member member = rq.getLoginedMember();
     System.out.printf("== 마이페이지 (%s) ==\n", member.getUsername());
     System.out.printf("아이디 : %s\n", member.getUsername());
     System.out.printf("이름 : %s\n", member.getName());
