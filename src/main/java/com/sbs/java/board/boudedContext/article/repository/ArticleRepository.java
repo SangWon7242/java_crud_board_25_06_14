@@ -18,11 +18,11 @@ public class ArticleRepository {
 
   void makeTestData() {
     IntStream.rangeClosed(1, 100)
-        .forEach(i -> write("제목 " + i, "내용 " + i));
+        .forEach(i -> write("제목 " + i, "내용 " + i, 1));
   }
 
-  public int write(String subject, String content) {
-    Article article = new Article(subject, content);
+  public int write(String subject, String content, int memberId) {
+    Article article = new Article(subject, content, memberId);
     articles.add(article);
 
     return article.getId();

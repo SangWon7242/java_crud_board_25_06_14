@@ -1,6 +1,8 @@
 package com.sbs.java.board.boudedContext.article;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -10,8 +12,13 @@ public class Article {
   private int id;
   private String subject;
   private String content;
+  private int memberId;
 
-  public Article(String subject, String content) {
-    this(++lastId, subject, content);
+  static {
+    lastId = 0;
+  }
+
+  public Article(String subject, String content, int memberId) {
+    this(++lastId, subject, content, memberId);
   }
 }
