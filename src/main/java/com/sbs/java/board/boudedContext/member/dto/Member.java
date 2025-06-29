@@ -14,6 +14,14 @@ public class Member {
   private String password;
   private String name;
 
+  public String getType() {
+    return isAdmin() ? "관리자" : "일반회원";
+  }
+
+  public boolean isAdmin() {
+    return username.equals("admin");
+  }
+
   static {
     lastId = 0;
   }

@@ -32,6 +32,7 @@ public class MemberController implements Controller {
     System.out.printf("아이디 : %s\n", member.getUsername());
     System.out.printf("가입날짜 : %s\n", member.getRegDate());
     System.out.printf("이름 : %s\n", member.getName());
+    System.out.printf("회원타입 : %s\n", member.getType());
   }
 
   private void doLogout(Rq rq) {
