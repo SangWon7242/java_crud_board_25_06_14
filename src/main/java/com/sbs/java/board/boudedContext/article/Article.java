@@ -13,12 +13,13 @@ public class Article {
   private String subject;
   private String content;
   private int memberId;
+  private String writerName;
 
   static {
     lastId = 0;
   }
 
-  public Article(String subject, String content, int memberId) {
-    this(++lastId, subject, content, memberId);
+  public Article(String subject, String content, int memberId, String writerName) {
+    this(++lastId, subject, content, memberId, writerName);
   }
 }
