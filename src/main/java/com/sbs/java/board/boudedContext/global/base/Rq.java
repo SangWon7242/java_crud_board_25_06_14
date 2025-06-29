@@ -1,5 +1,7 @@
 package com.sbs.java.board.boudedContext.global.base;
 
+import com.sbs.java.board.boudedContext.global.containerr.Container;
+import com.sbs.java.board.boudedContext.global.session.Session;
 import com.sbs.java.board.boudedContext.global.standard.Ut;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,10 +28,16 @@ public class Rq {
   @Setter
   String actionMethodName;
 
+  Session session;
+  String loginedMember;
+
   public Rq(String url) {
     this.url = url;
     params =  Ut.getParamsFormUrl(url);
     urlPath = Ut.getPathFromUrl(url);
+
+    session = Container.session;
+    loginedMember = "loginedMember";
   }
 
 
@@ -64,5 +72,31 @@ public class Rq {
     if(!params.containsKey(paramName)) return defaultValue;
 
     return params.get(paramName);
+  }
+  
+  // 로그인 여부 확인
+  public boolean isLogined() {
+    return session.hasAttribute(loginedMember);
+  }
+
+  // 로그아웃 여부 확인
+  public boolean isLogout() {
+    return !isLogined();
+  }
+
+  public void setSessionAttr(String key, Object value) {
+    session.setAttribute(key, value);
+  }
+
+  public Object getSessionAttr(String key) {
+    return session.getAttribute(key);
+  }
+
+  public boolean hasSessionAttr(String key) {
+    return session.hasAttribute(key);
+  }
+
+  public void removeSessionAttr(String key) {
+    session.removeAttribute(key);
   }
 }

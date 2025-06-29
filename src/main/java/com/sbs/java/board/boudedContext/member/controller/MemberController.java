@@ -19,7 +19,20 @@ public class MemberController implements Controller {
       doJoin(rq);
     } else if (rq.getActionPath().equals("/usr/member/login")) {
       doLogin(rq);
+    } else if (rq.getActionPath().equals("/usr/member/logout")) {
+      doLogout(rq);
     }
+  }
+
+  private void doLogout(Rq rq) {
+    if(rq.isLogout()) {
+      System.out.println("로그인되어 있지 않습니다.");
+      return;
+    }
+
+    rq.removeSessionAttr("loginedMember");
+
+    System.out.println("로그아웃 되었습니다.");
   }
 
   public void doJoin(Rq rq) {
@@ -100,6 +113,11 @@ public class MemberController implements Controller {
   }
 
   public void doLogin(Rq rq) {
+    if(rq.isLogined()) {
+      System.out.println("이미 로그인되어 있습니다.");
+      return;
+    }
+
     String username;
     String password;
     Member member;
@@ -143,6 +161,8 @@ public class MemberController implements Controller {
 
       break;
     }
+
+    rq.setSessionAttr("loginedMember", member);
 
     System.out.println("로그인 되었습니다.");
   }
