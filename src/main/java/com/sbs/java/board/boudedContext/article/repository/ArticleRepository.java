@@ -1,6 +1,7 @@
 package com.sbs.java.board.boudedContext.article.repository;
 
 import com.sbs.java.board.boudedContext.article.Article;
+import com.sbs.java.board.boudedContext.global.standard.Ut;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,10 @@ public class ArticleRepository {
   }
 
   public int write(String subject, String content, int memberId, String writerName) {
-    Article article = new Article(subject, content, memberId, writerName);
+    String regDate = Ut.getNowDateStr();
+    String updateDate = Ut.getNowDateStr();
+
+    Article article = new Article(regDate, updateDate, subject, content, memberId, writerName);
     articles.add(article);
 
     return article.getId();
@@ -74,6 +78,10 @@ public class ArticleRepository {
 
     if (article == null) return;
 
+    // 수정 시점의 날짜를 가져옴
+    String updateDate = Ut.getNowDateStr();
+
+    article.setUpdateDate(updateDate);
     article.setSubject(subject);
     article.setContent(content);
   }

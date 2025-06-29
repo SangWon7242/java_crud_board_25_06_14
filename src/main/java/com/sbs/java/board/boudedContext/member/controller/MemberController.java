@@ -30,6 +30,7 @@ public class MemberController implements Controller {
     Member member = rq.getLoginedMember();
     System.out.printf("== 마이페이지 (%s) ==\n", member.getUsername());
     System.out.printf("아이디 : %s\n", member.getUsername());
+    System.out.printf("가입날짜 : %s\n", member.getRegDate());
     System.out.printf("이름 : %s\n", member.getName());
   }
 

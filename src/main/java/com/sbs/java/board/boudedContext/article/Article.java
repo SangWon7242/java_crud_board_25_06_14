@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 public class Article {
   private static int lastId;
   private int id;
+  private String regDate;
+  private String updateDate;
   private String subject;
   private String content;
   private int memberId;
@@ -19,7 +21,7 @@ public class Article {
     lastId = 0;
   }
 
-  public Article(String subject, String content, int memberId, String writerName) {
-    this(++lastId, subject, content, memberId, writerName);
+  public Article(String regDate, String updateDate, String subject, String content, int memberId, String writerName) {
+    this(++lastId, regDate, updateDate, subject, content, memberId, writerName);
   }
 }

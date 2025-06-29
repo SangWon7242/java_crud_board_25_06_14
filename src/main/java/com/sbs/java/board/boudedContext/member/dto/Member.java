@@ -8,6 +8,8 @@ import lombok.Data;
 public class Member {
   private static int lastId;
   private int id;
+  private String regDate;
+  private String updateDate;
   private String username;
   private String password;
   private String name;
@@ -16,7 +18,7 @@ public class Member {
     lastId = 0;
   }
 
-  public Member(String username, String password, String name) {
-    this(++lastId, username, password, name);
+  public Member(String regDate, String updateDate, String username, String password, String name) {
+    this(++lastId, regDate, updateDate, username, password, name);
   }
 }
