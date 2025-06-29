@@ -108,6 +108,13 @@ public class ArticleController implements Controller {
       return;
     }
 
+    Member member = rq.getLoginedMember();
+
+    if(article.getMemberId() != member.getId()) {
+      System.out.println("수정에 대한 권한이 없습니다.");
+      return;
+    }
+
     System.out.println("== 게시물 수정 ==");
     System.out.print("제목 : ");
     String subject = Container.sc.nextLine();
@@ -131,6 +138,13 @@ public class ArticleController implements Controller {
 
     if (article == null) {
       System.out.println("게시물이 존재하지 않습니다.");
+      return;
+    }
+
+    Member member = rq.getLoginedMember();
+
+    if(article.getMemberId() != member.getId()) {
+      System.out.println("삭제에 대한 권한이 없습니다.");
       return;
     }
 
